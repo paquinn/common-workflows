@@ -1,0 +1,27 @@
+on:
+  workflow_call:
+    inputs:
+      SLACK_CHANNEL:
+        required: true
+        type: string
+      DEPLOYMENT:
+        required: true
+        type: string
+      RELEASE_REVISION:
+        required: true
+        type: string
+      GITHUB_ACTOR:
+        required: true
+        type: string
+
+jobs:
+  reusable_workflow_job:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Notify slack
+      uses: pullreminders/slack-action@master
+      with:
+        args: '{\"channel\":\"${{ input.SLACK_CHANNEL}}\",\"text\":\"\r\n\r\n---------------------\r\n:construction: Starting build: Project *${{ input.DEPLOYMENT }}*\r\n
+        Tag version: *${{ input.RELEASE_REVISION }}*\r\n
+        Launched by: *${{ input.GITHUB_ACTOR }}*\r\n
+        --- (:candle:)\"}'
