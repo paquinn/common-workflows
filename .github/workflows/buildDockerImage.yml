@@ -11,7 +11,7 @@ on:
         required: true
         type: string
 
-name: Start Task Slack Notification
+name: Build and push docker image
 
 jobs:
   reusable_workflow_job:
