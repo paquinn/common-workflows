@@ -16,6 +16,9 @@ on:
       SLACK_BOT_TOKEN:
         required: true
         type: string
+    secrets:
+      envPAT:
+        required: true
 
 name: Start Task Slack Notification
 
