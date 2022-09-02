@@ -13,9 +13,6 @@ on:
       GITHUB_ACTOR:
         required: true
         type: string
-      SLACK_BOT_TOKEN:
-        required: true
-        type: string
     secrets:
       envPAT:
         required: true
@@ -29,6 +26,7 @@ jobs:
     - name: Notify slack
       uses: pullreminders/slack-action@master
       with:
+        SLACK_BOT_TOKEN: ${{ secrets.envPAT }}
         args: '{\"channel\":\"${{ inputs.SLACK_CHANNEL }}\",\"text\":\"\r\n\r\n---------------------\r\n:construction: Starting build: Project *${{ inputs.DEPLOYMENT }}*\r\n
         Tag version: *${{ inputs.RELEASE_REVISION }}*\r\n
         Launched by: *${{ inputs.GITHUB_ACTOR }}*\r\n
