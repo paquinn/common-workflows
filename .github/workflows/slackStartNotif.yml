@@ -20,7 +20,7 @@ on:
 name: Start Task Slack Notification
 
 env:
-  SLACK_BOT_TOKEN: ${{ secrets.envPAT }}
+  SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
 jobs:
   reusable_workflow_job:
