@@ -10,6 +10,9 @@ on:
       RELEASE_REVISION:
         required: true
         type: string
+    secrets:
+      KUBE_CONFIG:
+        required: true
 
 name: Build Helm Package
 
@@ -21,8 +24,8 @@ jobs:
       run: |
         mv ${{ inputs.LOCAL_PATH }}/Chart.yaml ${{ inputs.LOCAL_PATH }}/Chart.old.yaml &&
         cat ${{ inputs.LOCAL_PATH }}/Chart.old.yaml | grep -Ev "appVersion|version" > ${{ inputs.LOCAL_PATH }}/Chart.yaml &&
-        echo -e "\r\nappVersion: ${{ env.RELEASE_REVISION }}\r\n" >> ${{ inputs.LOCAL_PATH }}/Chart.yaml &&
-        echo -e "\r\nversion: ${{ env.RELEASE_REVISION }}\r\n" >> ${{ inputs.LOCAL_PATH }}/Chart.yaml &&
+        echo -e "\r\nappVersion: ${{ inputs.RELEASE_REVISION }}\r\n" >> ${{ inputs.LOCAL_PATH }}/Chart.yaml &&
+        echo -e "\r\nversion: ${{ inputs.RELEASE_REVISION }}\r\n" >> ${{ inputs.LOCAL_PATH }}/Chart.yaml &&
         cat ${{ inputs.LOCAL_PATH }}/Chart.yaml  
     - name: Install s3 helm plugin
       uses: WyriHaximus/github-action-helm3@v2
@@ -36,10 +39,10 @@ jobs:
     - name: Helm add repo
       uses: WyriHaximus/github-action-helm3@v2
       with: 
-        exec: helm repo add ${{ env.DEPLOYMENT }} ${{ env.HELM_CHART_REPO }}/${{ env.DEPLOYMENT }}
-        kubeconfig: '${{ secrets.KUBE_CONFIG_GROKIT_DEV }}'
+        exec: helm repo add ${{ inputs.DEPLOYMENT }} ${{ env.HELM_CHART_REPO }}/${{ inputs.DEPLOYMENT }}
+        kubeconfig: '${{ secrets.KUBE_CONFIG }}'
     - name: Helm push chart
       uses: WyriHaximus/github-action-helm3@v2
       with: 
-        exec: helm s3 push --relative --force ./${{ env.DEPLOYMENT }}-${{ env.RELEASE_REVISION }}.tgz ${{ env.DEPLOYMENT }}
-        kubeconfig: '${{ secrets.KUBE_CONFIG_GROKIT_DEV }}'
+        exec: helm s3 push --relative --force ./${{ inputs.DEPLOYMENT }}-${{ inputs.RELEASE_REVISION }}.tgz ${{ inputs.DEPLOYMENT }}
+        kubeconfig: '${{ secrets.KUBE_CONFIG }}'
