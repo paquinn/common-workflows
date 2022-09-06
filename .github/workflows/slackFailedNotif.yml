@@ -1,0 +1,37 @@
+on:
+  workflow_call:
+    inputs:
+      SLACK_CHANNEL:
+        required: true
+        type: string
+      DEPLOYMENT:
+        required: true
+        type: string
+      RELEASE_REVISION:
+        required: true
+        type: string
+      COMMIT_MESSAGE:
+        required: true
+        type: string
+      GITHUB_ACTOR:
+        required: true
+        type: string
+    secrets:
+      SLACK_BOT_TOKEN:
+        required: true
+
+name: Failed Slack Notification
+
+env:
+  SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+jobs:
+  reusable_workflow_job:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Notify slack
+      uses: pullreminders/slack-action@master
+      with:
+        args: '{\"channel\":\"${{ inputs.SLACK_CHANNEL }}\",\"text\":\"\r\n\r\n---------------------\r\n:disappointed: Failed build: Project *${{ inputs.DEPLOYMENT }}*\r\n
+          Tag/Commit version: *${{ inputs.RELEASE_REVISION }}*
+          Commit message: *${{ inputs.COMMIT_MESSAGE }}\"}'
