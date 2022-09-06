@@ -10,6 +10,12 @@ on:
       RELEASE_REVISION:
         required: true
         type: string
+      DEPLOYMENT:
+        required: true
+        type: string
+      HELM_CHART_REPO:
+        required: true
+        type: string
     secrets:
       KUBE_CONFIG:
         required: true
@@ -39,7 +45,7 @@ jobs:
     - name: Helm add repo
       uses: WyriHaximus/github-action-helm3@v2
       with: 
-        exec: helm repo add ${{ inputs.DEPLOYMENT }} ${{ env.HELM_CHART_REPO }}/${{ inputs.DEPLOYMENT }}
+        exec: helm repo add ${{ inputs.DEPLOYMENT }} ${{ inputs.HELM_CHART_REPO }}/${{ inputs.DEPLOYMENT }}
         kubeconfig: '${{ secrets.KUBE_CONFIG }}'
     - name: Helm push chart
       uses: WyriHaximus/github-action-helm3@v2
