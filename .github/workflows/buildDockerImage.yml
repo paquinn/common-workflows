@@ -32,6 +32,8 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-single-buildx
 
+    - run: ls -l
+
     - name: Build & Push Image
       env:
         RELEASE_IMAGE: ${{ secrets.ECR_REGISTRY }}/${{ inputs.ECR_REPOSITORY }}:${{ inputs.RELEASE_REVISION }}
