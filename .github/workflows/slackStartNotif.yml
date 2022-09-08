@@ -4,9 +4,9 @@ on:
       SLACK_CHANNEL:
         required: true
         type: string
-      DEPLOYMENT:
-        required: true
-        type: string
+#      DEPLOYMENT:
+#        required: true
+#        type: string
       RELEASE_REVISION:
         required: true
         type: string
@@ -29,7 +29,7 @@ jobs:
     - name: Notify slack
       uses: pullreminders/slack-action@master
       with:
-        args: '{\"channel\":\"${{ inputs.SLACK_CHANNEL }}\",\"text\":\"\r\n\r\n---------------------\r\n:construction: Starting build: Project *${{ inputs.DEPLOYMENT }}*\r\n
+        args: '{\"channel\":\"${{ inputs.SLACK_CHANNEL }}\",\"text\":\"\r\n\r\n---------------------\r\n:construction: Starting build: Project *${{ secrets.DEPLOYMENT }}*\r\n
         Tag version: *${{ inputs.RELEASE_REVISION }}*\r\n
         Launched by: *${{ inputs.GITHUB_ACTOR }}*\r\n
         --- (:candle:)\"}'
