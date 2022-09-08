@@ -7,6 +7,9 @@ on:
       ECR_REPOSITORY:
         required: true
         type: string
+      DOCKER_FILE:
+        required: true
+        type: string
     secrets:
       ECR_REGISTRY:
         required: true
