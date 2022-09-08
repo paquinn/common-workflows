@@ -21,6 +21,11 @@ jobs:
   reusable_workflow_job:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+
     - name: Prep helm chart
       run: |
         mv ${{ inputs.LOCAL_PATH }}/Chart.yaml ${{ inputs.LOCAL_PATH }}/Chart.old.yaml &&
@@ -28,20 +33,24 @@ jobs:
         echo -e "\r\nappVersion: ${{ inputs.RELEASE_REVISION }}\r\n" >> ${{ inputs.LOCAL_PATH }}/Chart.yaml &&
         echo -e "\r\nversion: ${{ inputs.RELEASE_REVISION }}\r\n" >> ${{ inputs.LOCAL_PATH }}/Chart.yaml &&
         cat ${{ inputs.LOCAL_PATH }}/Chart.yaml  
+
     - name: Install s3 helm plugin
       uses: WyriHaximus/github-action-helm3@v2
       with: 
         exec: helm plugin install https://github.com/hypnoglow/helm-s3.git
+
     - name: Helm package chart
       uses: WyriHaximus/github-action-helm3@v2
       with: 
         exec: helm package ${{ inputs.LOCAL_PATH }}
         kubeconfig: '${{ secrets.KUBE_CONFIG }}'
+
     - name: Helm add repo
       uses: WyriHaximus/github-action-helm3@v2
       with: 
         exec: helm repo add ${{ secrets.DEPLOYMENT }} ${{ secrets.HELM_CHART_REPO }}/${{ secrets.DEPLOYMENT }}
         kubeconfig: '${{ secrets.KUBE_CONFIG }}'
+
     - name: Helm push chart
       uses: WyriHaximus/github-action-helm3@v2
       with: 
