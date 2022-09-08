@@ -1,14 +1,13 @@
 on:
   workflow_call:
     inputs:
-      ECR_REPOSITORY:
-        required: true
-        type: string
       RELEASE_REVISION:
         required: true
         type: string
     secrets:
       ECR_REGISTRY:
+        required: true
+      ECR_REPOSITORY:
         required: true
 
 name: Build and push docker image
@@ -31,9 +30,8 @@ jobs:
 
     - name: Build & Push Image
       env:
-        ECR_REGISTRY: ${{ inputs.ECR_REGISTRY }}
-        RELEASE_IMAGE: ${{ inputs.ECR_REGISTRY }}/${{ inputs.ECR_REPOSITORY }}:${{ inputs.RELEASE_REVISION }}
+        RELEASE_IMAGE: ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:${{ inputs.RELEASE_REVISION }}
       run: |
-        DOCKER_OPTS="${DOCKER_OPTS} --registry-mirror=https://mirror.gcr.io"  docker build -t ${{ inputs.ECR_REPOSITORY }}:${{ inputs.RELEASE_REVISION }} . -f ontology-graphql/docker/Dockerfile --build-arg GITHUB_TOKEN
-        docker tag ${{ inputs.ECR_REPOSITORY }}:${{ inputs.RELEASE_REVISION }} ${{ env.RELEASE_IMAGE  }}
+        DOCKER_OPTS="${DOCKER_OPTS} --registry-mirror=https://mirror.gcr.io"  docker build -t ${{ secrest.ECR_REPOSITORY }}:${{ inputs.RELEASE_REVISION }} . -f ontology-graphql/docker/Dockerfile --build-arg GITHUB_TOKEN
+        docker tag ${{ secrets.ECR_REPOSITORY }}:${{ inputs.RELEASE_REVISION }} ${{ env.RELEASE_IMAGE  }}
         docker push ${{ env.RELEASE_IMAGE  }}

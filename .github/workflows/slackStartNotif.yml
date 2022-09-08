@@ -4,9 +4,6 @@ on:
       SLACK_CHANNEL:
         required: true
         type: string
-#      DEPLOYMENT:
-#        required: true
-#        type: string
       RELEASE_REVISION:
         required: true
         type: string
