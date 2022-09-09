@@ -8,7 +8,7 @@ on:
         required: true
         type: string
     secrets:
-      KUBE_CONFIG:
+      KUBE_CONFIG_GROKIT_DEV:
         required: true
       HELM_CHART_REPO:
         required: true
