@@ -20,6 +20,7 @@ jobs:
   reusable_workflow_job:
     runs-on: ubuntu-latest
     steps:
+    - run: echo ${{ secrets.ECR_REGISTRY }}
     - name: Checkout
       uses: actions/checkout@v2
       with:
@@ -36,8 +37,6 @@ jobs:
         key: ${{ runner.os }}-single-buildx-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-single-buildx
-
-    - run: ls -l
 
     - name: Build & Push Image
       env:
