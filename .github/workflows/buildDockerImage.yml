@@ -10,6 +10,15 @@ on:
       DOCKER_FILE:
         required: true
         type: string
+      AWS_ACCESS_KEY_ID:
+        required: true
+        type: string
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+        type: string
+      AWS_REGION:
+        required: true
+        type: string
     secrets:
       ECR_REGISTRY:
         required: true
@@ -20,11 +29,21 @@ jobs:
   reusable_workflow_job:
     runs-on: ubuntu-latest
     steps:
-    - run: echo ${{ secrets.ECR_REGISTRY }}
     - name: Checkout
       uses: actions/checkout@v2
       with:
         ref: ${{ github.event.pull_request.head.sha }}
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
 
     - name: Set up Docker Buildx
       id: buildx
