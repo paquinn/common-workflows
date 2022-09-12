@@ -7,6 +7,9 @@ on:
       RELEASE_REVISION:
         required: true
         type: string
+      ENVIRONMENT:
+        required: true
+        type: string
       GITHUB_ACTOR:
         required: true
         type: string
