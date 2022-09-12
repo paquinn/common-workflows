@@ -62,7 +62,7 @@ jobs:
     - name: Helm add repo
       uses: WyriHaximus/github-action-helm3@v2
       with: 
-        exec: helm repo add ${{ secrets.DEPLOYMENT }} ${{ secrets.HELM_CHART_REPO }}/${{ secrets.DEPLOYMENT }}
+        exec: helm repo add ${{ secrets.DEPLOYMENT }} ${{ inputs.HELM_CHART_REPO }}/${{ secrets.DEPLOYMENT }}
         kubeconfig: '${{ secrets.KUBE_CONFIG_GROKIT_DEV }}'
 
     - name: Helm push chart
