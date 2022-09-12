@@ -7,9 +7,6 @@ on:
       RELEASE_REVISION:
         required: true
         type: string
-      COMMIT_MESSAGE:
-        required: true
-        type: string
       GITHUB_ACTOR:
         required: true
         type: string
