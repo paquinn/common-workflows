@@ -13,6 +13,9 @@ on:
       CONTAINER:
         required: true
         type: string
+      KUBE_NAMESPACE:
+        required: true
+        type: string
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
