@@ -31,6 +31,6 @@ jobs:
     - name: Notify slack
       uses: pullreminders/slack-action@master
       with:
-        args: '{\"channel\":\"${{ inputs.SLACK_CHANNEL }}\",\"text\":\"\r\n\r\n---------------------\r\n:blush: Success build: Project *${{ secrets.DEPLOYMENT }}* \n\r
-          Tag/Commit version: *${{ inputs.RELEASE_REVISION }}* \n\r
-          Commit message: *${{ inputs.COMMIT_MESSAGE }}*\"}'
+        args: '{\"channel\":\"${{ inputs.SLACK_CHANNEL }}\",
+          \"text\":\"\r\n\r\n---------------------\r\n:blush: Success build: Project *${{ secrets.DEPLOYMENT }}* \n\r
+          Tag/Commit version: *${{ inputs.RELEASE_REVISION }}*\"}'

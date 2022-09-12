@@ -31,6 +31,6 @@ jobs:
     - name: Notify slack
       uses: pullreminders/slack-action@master
       with:
-        args: '{\"channel\":\"${{ inputs.SLACK_CHANNEL }}\",\"text\":\"\r\n\r\n---------------------\r\n:disappointed: Failed build: Project *${{ secrets.DEPLOYMENT }}*\r\n
-          Tag/Commit version: *${{ inputs.RELEASE_REVISION }}*
-          Commit message: *${{ inputs.COMMIT_MESSAGE }}\"}'
+        args: '{\"channel\":\"${{ inputs.SLACK_CHANNEL }}\",
+          \"text\":\"\r\n\r\n---------------------\r\n:disappointed: Failed build: Project *${{ secrets.DEPLOYMENT }}*\r\n
+          Tag/Commit version: *${{ inputs.RELEASE_REVISION }}*\"}'
