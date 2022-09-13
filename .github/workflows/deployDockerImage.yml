@@ -22,8 +22,8 @@ name: Build and push docker image
 jobs:
   reusable_workflow_job:
     runs-on: ubuntu-latest
-    outputs:
-      CONTAINER: ${{ steps.set-container-var.outputs.CONTAINER }}
+#    outputs:
+#      CONTAINER: ${{ steps.set-container-var.outputs.CONTAINER }}
     steps:
     - name: Set CONTAINER var if false
       if: ${{ inputs.CONTAINER }}
@@ -43,16 +43,14 @@ jobs:
         aws-region: ${{ secrets.AWS_REGION }}
 
     - name: Login to Amazon ECR
-      needs: [aws-credentials]
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
    
     - name: Deploy to Kubernetes cluster
-      needs: [set-values, login-ecr]
       uses: datanextsolutions/kubectl-aws-eks@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_GROKIT_DEV }}
         RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ inputs.ECR_REPOSITORY }}:${{ inputs.RELEASE_REVISION }}
-        CONTAINER: ${{ needs.set-values.outputs.CONTAINER }}
+        CONTAINER: ${{ steps.set-values.outputs.CONTAINER }}
       with:
         args: set image deployment/${{ secrets.DEPLOYMENT }} ${{ env.CONTAINER }}=${{ env.RELEASE_IMAGE }} -n ${{ inputs.KUBE_NAMESPACE }}
