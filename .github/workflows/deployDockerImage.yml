@@ -13,6 +13,9 @@ on:
       KUBE_NAMESPACE:
         required: true
         type: string
+      KUBE_CLUSTER:
+        required: true
+        type: string
       CONTAINER:
         required: false
         type: string
@@ -22,13 +25,15 @@ name: Build and push docker image
 jobs:
   reusable_workflow_job:
     runs-on: ubuntu-latest
-#    outputs:
-#      CONTAINER: ${{ steps.set-container-var.outputs.CONTAINER }}
     steps:
     - name: Set CONTAINER var if false
       if: ${{ inputs.CONTAINER }} == ''
-      id: set-values
-      run: echo "::set-output name=CONTAINER::${{ secrets.DEPLOYMENT }}"
+      run: echo "CONTAINER=${{ secrets.DEPLOYMENT }}" >> $GITHUB_ENV
+
+    - name: Set EKS cluster
+      run: echo "KUBE_CONFIG_DATA=${{ secrets.KUBE_CONFIG_GROKIT_DEV }}" >> $GITHUB_ENV
+    - if: ${{ inputs.KUBE_CLUSTER }} == 'prod'
+      run: echo "KUBE_CONFIG_DATA=${{ secrets.KUBE_CONFIG_GROKIT_PROD }}" >> $GITHUB_ENV
 
     - name: Checkout
       uses: actions/checkout@v2
@@ -49,7 +54,7 @@ jobs:
     - name: Deploy to Kubernetes cluster
       uses: datanextsolutions/kubectl-aws-eks@master
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_GROKIT_DEV }}
+        KUBE_CONFIG_DATA: ${{ env.KUBE_CONFIG_DATA }}
         RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ inputs.ECR_REPOSITORY }}:${{ inputs.RELEASE_REVISION }}
         CONTAINER: ${{ steps.set-values.outputs.CONTAINER }}
       with:
