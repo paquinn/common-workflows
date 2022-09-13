@@ -32,6 +32,6 @@ jobs:
         args: '{\"channel\":\"${{ inputs.SLACK_CHANNEL }}\",
         \"text\":\"\r\n\r\n---------------------\r\n:construction: Starting deploy: Project *${{ secrets.DEPLOYMENT }}*\r\n
         Tag version: *${{ inputs.RELEASE_REVISION }}*\r\n
-        Environment: *${{ inputs.ENVIRONMENT }}*-native
+        Environment: *${{ inputs.ENVIRONMENT }}-native*
         Launched by: *${{ inputs.GITHUB_ACTOR }}*\
         \r\n--- (:candle:)\"}'

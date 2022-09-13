@@ -13,22 +13,33 @@ on:
       KUBE_NAMESPACE:
         required: true
         type: string
-    secrets:
-      AWS_ACCESS_KEY_ID:
-        required: true
-      AWS_SECRET_ACCESS_KEY:
-        required: true
-      AWS_REGION:
-        required: true
-      KUBE_CONFIG_GROKIT_DEV:
-        required: true
+      CONTAINER:
+        REQUIRED: false
+        type: string
+#    secrets:
+#      AWS_ACCESS_KEY_ID:
+#        required: true
+#      AWS_SECRET_ACCESS_KEY:
+#        required: true
+#      AWS_REGION:
+#        required: true
+#      KUBE_CONFIG_GROKIT_DEV:
+#        required: true
 
 name: Build and push docker image
 
 jobs:
   reusable_workflow_job:
     runs-on: ubuntu-latest
+    outputs:
+      CONTAINER: ${{ steps.set-container-var.outputs.CONTAINER }}
     steps:
+    - name: Set CONTAINER var if false
+      if: (( inputs.CONTAINER ))
+      id: set-values
+      run: | 
+        echo "::set-output name=CONTAINER::${{ secrets.DEPLOYMENT }}"
+
     - name: Checkout
       uses: actions/checkout@v2
       with:
