@@ -31,9 +31,11 @@ jobs:
       run: echo "CONTAINER=${{ secrets.DEPLOYMENT }}" >> $GITHUB_ENV
 
     - name: Set EKS cluster
-      run: echo ${{ inputs.KUBE_CLUSTER }}
+      run: |
+        echo ${{ inputs.KUBE_CLUSTER }}
         echo "KUBE_CONFIG_DATA=${{ secrets.KUBE_CONFIG_GROKIT_DEV }}" >> $GITHUB_ENV
-    - if: ${{ inputs.KUBE_CLUSTER }} == 'prod'
+    - name: Set EKS cluster if prod
+      if: ${{ inputs.KUBE_CLUSTER }} == 'prod'
       run: |
         echo "KUBE_CONFIG_DATA=${{ secrets.KUBE_CONFIG_GROKIT_PROD }}" >> $GITHUB_ENV
         echo "Setting as PROD"
