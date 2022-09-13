@@ -54,8 +54,6 @@ jobs:
     - name: Deploy to Kubernetes cluster
       uses: datanextsolutions/kubectl-aws-eks@master
       env:
-        KUBE_CONFIG_DATA: ${{ env.KUBE_CONFIG_DATA }}
         RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ inputs.ECR_REPOSITORY }}:${{ inputs.RELEASE_REVISION }}
-        CONTAINER: ${{ steps.set-values.outputs.CONTAINER }}
       with:
         args: set image deployment/${{ secrets.DEPLOYMENT }} ${{ env.CONTAINER }}=${{ env.RELEASE_IMAGE }} -n ${{ inputs.KUBE_NAMESPACE }}
