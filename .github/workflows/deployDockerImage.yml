@@ -32,13 +32,12 @@ jobs:
 
     - name: Set EKS cluster
       run: |
-        echo "KUBE_CONFIG_DATA=${{ secrets.KUBE_CONFIG_GROKIT_DEV }}" >> $GITHUB_ENV
+        echo "KUBE_CONFIG_DATA=${{ secrets.KUBE_CONFIG_GROKIT_PROD }}" >> $GITHUB_ENV
     - name: Set EKS cluster if prod
-      if: contains(${{ inputs.KUBE_CLUSTER }}, 'prod')
+      if: ${{ inputs.KUBE_CLUSTER }} != 'prod'
       run: |
         echo ${{ inputs.KUBE_CLUSTER }}
-        echo "KUBE_CONFIG_DATA=${{ secrets.KUBE_CONFIG_GROKIT_PROD }}" >> $GITHUB_ENV
-        echo "Setting as PROD"
+        echo "KUBE_CONFIG_DATA=${{ secrets.KUBE_CONFIG_GROKIT_DEV }}" >> $GITHUB_ENV
 
     - name: Checkout
       uses: actions/checkout@v2
