@@ -37,8 +37,7 @@ jobs:
     - name: Set CONTAINER var if false
       if: (( inputs.CONTAINER ))
       id: set-values
-      run: | 
-        echo "::set-output name=CONTAINER::${{ secrets.DEPLOYMENT }}"
+      run: echo "::set-output name=CONTAINER::${{ secrets.DEPLOYMENT }}"
 
     - name: Checkout
       uses: actions/checkout@v2
