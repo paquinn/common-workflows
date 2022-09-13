@@ -35,7 +35,7 @@ jobs:
       CONTAINER: ${{ steps.set-container-var.outputs.CONTAINER }}
     steps:
     - name: Set CONTAINER var if false
-      if: (( inputs.CONTAINER ))
+      if: ${{ inputs.CONTAINER }}
       id: set-values
       run: echo "::set-output name=CONTAINER::${{ secrets.DEPLOYMENT }}"
 
