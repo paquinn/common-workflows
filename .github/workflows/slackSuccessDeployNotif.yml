@@ -13,26 +13,28 @@ on:
       GITHUB_ACTOR:
         required: true
         type: string
-    secrets:
-      SLACK_BOT_TOKEN:
-        required: true
       DEPLOYMENT:
-        required: true
+        required: false
+        type: string
 
 name: Success Slack Notification
 
 env:
   SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+  DEPLOYMENT: ${{ secrets.DEPLOYMENT }}
 
 jobs:
   reusable_workflow_job:
     runs-on: ubuntu-latest
     steps:
+    - name: Set deployment name # if is different from secrets.DEPLOYMENT
+      if: ${{ inputs.DEPLOYMENT }}
+      run: echo "DEPLOYMENT=${{ inputs.DEPLOYMENT }}" >> $GITHUB_ENV
     - name: Notify slack
       uses: pullreminders/slack-action@master
       with:
         args: '{\"channel\":\"${{ inputs.SLACK_CHANNEL }}\",
-          \"text\":\"\r\n\r\n---------------------\r\n:blush: Success deploy: Project *${{ secrets.DEPLOYMENT }}*\r\n
+          \"text\":\"\r\n\r\n---------------------\r\n:blush: Success deploy: Project *${{ env.DEPLOYMENT }}*\r\n
           Tag/Commit version: *${{ inputs.RELEASE_REVISION }}*\r\n
           Environment: *${{ inputs.ENVIRONMENT }}*-native\r\n
           Launched by: *${{ github.actor }}*\"}'

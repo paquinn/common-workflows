@@ -10,6 +10,9 @@ on:
       HELM_CHART_REPO:
         required: true
         type: string
+      DEPLOYMENT:
+        required: false
+        type: string
     secrets:
       KUBE_CONFIG_GROKIT_DEV:
         required: true
@@ -24,10 +27,16 @@ on:
 
 name: Build Helm Package
 
+env:
+  DEPLOYMENT: ${{ secrets.DEPLOYMENT }}
+
 jobs:
   reusable_workflow_job:
     runs-on: ubuntu-latest
     steps:
+    - name: Set deployment name # if is different from secrets.DEPLOYMENT
+      if: ${{ inputs.DEPLOYMENT }}
+      run: echo "DEPLOYMENT=${{ inputs.DEPLOYMENT }}" >> $GITHUB_ENV
     - name: Checkout
       uses: actions/checkout@v2
       with:
@@ -62,11 +71,11 @@ jobs:
     - name: Helm add repo
       uses: WyriHaximus/github-action-helm3@v2
       with: 
-        exec: helm repo add ${{ secrets.DEPLOYMENT }} ${{ inputs.HELM_CHART_REPO }}/${{ secrets.DEPLOYMENT }}
+        exec: helm repo add ${{ env.DEPLOYMENT }} ${{ inputs.HELM_CHART_REPO }}/${{ env.DEPLOYMENT }}
         kubeconfig: '${{ secrets.KUBE_CONFIG_GROKIT_DEV }}'
 
     - name: Helm push chart
       uses: WyriHaximus/github-action-helm3@v2
       with: 
-        exec: helm s3 push --relative --force ./${{ secrets.DEPLOYMENT }}-${{ inputs.RELEASE_REVISION }}.tgz ${{ secrets.DEPLOYMENT }}
+        exec: helm s3 push --relative --force ./${{ env.DEPLOYMENT }}-${{ inputs.RELEASE_REVISION }}.tgz ${{ env.DEPLOYMENT }}
         kubeconfig: '${{ secrets.KUBE_CONFIG_GROKIT_DEV }}'

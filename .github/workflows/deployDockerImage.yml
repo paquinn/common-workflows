@@ -19,16 +19,26 @@ on:
       CONTAINER:
         required: false
         type: string
+      DEPLOYMENT:
+        required: false
+        type: string
 
 name: Build and push docker image
+
+env:
+  DEPLOYMENT: ${{ secrets.DEPLOYMENT }}
 
 jobs:
   reusable_workflow_job:
     runs-on: ubuntu-latest
     steps:
+    - name: Set deployment name # if is different from secrets.DEPLOYMENT
+      if: ${{ inputs.DEPLOYMENT }}
+      run: echo "DEPLOYMENT=${{ inputs.DEPLOYMENT }}" >> $GITHUB_ENV
+
     - name: Set CONTAINER var if false
       if: ${{ inputs.CONTAINER }} == ''
-      run: echo "CONTAINER=${{ secrets.DEPLOYMENT }}" >> $GITHUB_ENV
+      run: echo "CONTAINER=${{ env.DEPLOYMENT }}" >> $GITHUB_ENV
 
     - name: Set EKS cluster
       run: |
@@ -60,4 +70,4 @@ jobs:
       env:
         RELEASE_IMAGE: ${{ steps.login-ecr.outputs.registry }}/${{ inputs.ECR_REPOSITORY }}:${{ inputs.RELEASE_REVISION }}
       with:
-        args: set image deployment/${{ secrets.DEPLOYMENT }} ${{ env.CONTAINER }}=${{ env.RELEASE_IMAGE }} -n ${{ inputs.KUBE_NAMESPACE }}
+        args: set image deployment/${{ env.DEPLOYMENT }} ${{ env.CONTAINER }}=${{ env.RELEASE_IMAGE }} -n ${{ inputs.KUBE_NAMESPACE }}
