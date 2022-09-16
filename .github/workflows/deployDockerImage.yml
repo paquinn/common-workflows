@@ -44,7 +44,7 @@ jobs:
       run: |
         echo "KUBE_CONFIG_DATA=${{ secrets.KUBE_CONFIG_GROKIT_PROD }}" >> $GITHUB_ENV
     - name: Set EKS cluster if not prod
-      if: ${{ inputs.KUBE_CLUSTER }} != 'grokit-prod'
+      if: ${{ inputs.KUBE_CLUSTER != 'grokit-prod' }}
       run: |
         echo ${{ inputs.KUBE_CLUSTER }}
         echo "KUBE_CONFIG_DATA=${{ secrets.KUBE_CONFIG_GROKIT_DEV }}" >> $GITHUB_ENV
