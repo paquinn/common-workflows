@@ -37,7 +37,7 @@ jobs:
       run: echo "DEPLOYMENT=${{ inputs.DEPLOYMENT }}" >> $GITHUB_ENV
 
     - name: Set CONTAINER var if false
-      if: ${{ inputs.CONTAINER }} == ''
+      if: ${{ inputs.CONTAINER == '' }}
       run: echo "CONTAINER=${{ env.DEPLOYMENT }}" >> $GITHUB_ENV
 
     - name: Set EKS cluster
