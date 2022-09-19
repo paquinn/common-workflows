@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Set deployment name # if is different from secrets.DEPLOYMENT
-      if: ${{ inputs.DEPLOYMENT }}
+      if: ${{ inputs.DEPLOYMENT != '' }}
       run: echo "DEPLOYMENT=${{ inputs.DEPLOYMENT }}" >> $GITHUB_ENV
     - name: Checkout
       uses: actions/checkout@v2
