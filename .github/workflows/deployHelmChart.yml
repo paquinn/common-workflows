@@ -1,0 +1,80 @@
+on:
+  workflow_call:
+    inputs:
+      RELEASE_REVISION:
+        required: true
+        type: string
+      ECR_REPOSITORY:
+        required: true
+        type: string
+      ENVIRONMENT:
+        required: true
+        type: string
+      KUBE_NAMESPACE:
+        required: true
+        type: string
+      KUBE_CLUSTER:
+        required: true
+        type: string
+      DEPLOYMENT:
+        required: false
+        type: string
+
+name: Build and push docker image
+
+env:
+  DEPLOYMENT: ${{ secrets.DEPLOYMENT }}
+
+jobs:
+  reusable_workflow_job:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set deployment name # if is different from secrets.DEPLOYMENT
+      if: ${{ inputs.DEPLOYMENT }}
+      run: echo "DEPLOYMENT=${{ inputs.DEPLOYMENT }}" >> $GITHUB_ENV
+
+#    - name: Set EKS cluster
+#      run: |
+#        echo "KUBE_CONFIG_DATA=${{ secrets.KUBE_CONFIG_GROKIT_PROD }}" >> $GITHUB_ENV
+#    - name: Set EKS cluster if not prod
+#      if: ${{ inputs.KUBE_CLUSTER != 'grokit-prod' }}
+#      run: |
+#        echo ${{ inputs.KUBE_CLUSTER }}
+#        echo "KUBE_CONFIG_DATA=${{ secrets.KUBE_CONFIG_GROKIT_DEV }}" >> $GITHUB_ENV
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+   
+    - name: Install s3 helm plugin
+      uses: WyriHaximus/github-action-helm3@v2
+      with: 
+        exec: helm plugin install https://github.com/hypnoglow/helm-s3.git
+
+    - name: Deploy chart
+      uses: craftech-io/eks-helm-deploy-action@v2.0.1-rc1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+        cluster-name: ${{ inputs.KUBE_CLUSTER }}
+        chart-path: ${{ env.DEPLOYMENT }}/${{ env.DEPLOYMENT }}
+        chart-repository: ${{ inputs.HELM_CHART_REPO }}/${{ env.DEPLOYMENT }}
+        name: ${{ env.DEPLOYMENT }}-dev
+        namespace: dev
+        values: environment=dev,app_version=${{ inputs.RELEASE_REVISION }}
+        config-files: helm/chart/env/values-${{ inputs.ENVIRONMENT }}.yaml
+        chart-version: ${{ inputs.RELEASE_REVISION }}
+
