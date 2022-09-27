@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: View repo
-      run: echo  ${{ inputs.HELM_CHART_REPO }}/${{ env.DEPLOYMENT }} | sed -i 's/./& /g'
+      run: echo  ${{ inputs.HELM_CHART_REPO }}/${{ env.DEPLOYMENT }} | sed -e 's/./& /g'
     - name: Set deployment name # if is different from secrets.DEPLOYMENT
       if: ${{ inputs.DEPLOYMENT }}
       run: echo "DEPLOYMENT=${{ inputs.DEPLOYMENT }}" >> $GITHUB_ENV
