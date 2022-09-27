@@ -73,7 +73,7 @@ jobs:
         aws-region: ${{ secrets.AWS_REGION }}
         cluster-name: ${{ inputs.KUBE_CLUSTER }}
         chart-path: ${{ env.DEPLOYMENT }}/${{ env.DEPLOYMENT }}
-        chart-repository: ${{ inputs.HELM_CHART_REPO }}/${{ env.DEPLOYMENT }}
+        chart-repository:  ${{ inputs.HELM_CHART_REPO }}/${{ env.DEPLOYMENT }}
         name: ${{ env.DEPLOYMENT }}-dev
         namespace: dev
         values: environment=dev,app_version=${{ inputs.RELEASE_REVISION }}
