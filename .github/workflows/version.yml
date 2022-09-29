@@ -1,0 +1,21 @@
+on:
+  workflow_dispatch:
+    inputs: 
+      Action: 
+        type: boolean
+        description: "Run workflow"
+        required: true
+
+permissions: read-all
+
+name:  '# Current version is v1.0.0 #'
+
+jobs:
+  changelog:
+    if: ${{ github.event.inputs.Action }}
+
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get Version
+      run: echo v1.0.0
