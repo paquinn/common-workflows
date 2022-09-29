@@ -35,15 +35,6 @@ jobs:
       if: ${{ inputs.DEPLOYMENT }}
       run: echo "DEPLOYMENT=${{ inputs.DEPLOYMENT }}" >> $GITHUB_ENV
 
-#    - name: Set EKS cluster
-#      run: |
-#        echo "KUBE_CONFIG_DATA=${{ secrets.KUBE_CONFIG_GROKIT_PROD }}" >> $GITHUB_ENV
-#    - name: Set EKS cluster if not prod
-#      if: ${{ inputs.KUBE_CLUSTER != 'grokit-prod' }}
-#      run: |
-#        echo ${{ inputs.KUBE_CLUSTER }}
-#        echo "KUBE_CONFIG_DATA=${{ secrets.KUBE_CONFIG_GROKIT_DEV }}" >> $GITHUB_ENV
-
     - name: Checkout
       uses: actions/checkout@v2
       with:
@@ -74,9 +65,9 @@ jobs:
         cluster-name: ${{ inputs.KUBE_CLUSTER }}
         chart-path: ${{ env.DEPLOYMENT }}/${{ env.DEPLOYMENT }}
         chart-repository:  ${{ inputs.HELM_CHART_REPO }}/${{ env.DEPLOYMENT }}
-        name: ${{ env.DEPLOYMENT }}-dev
-        namespace: dev
-        values: environment=dev,app_version=${{ inputs.RELEASE_REVISION }}
+        name: ${{ env.DEPLOYMENT }}-${{ inputs.ENVIRONMENT }}
+        namespace: ${{ inputs.ENVIRONMENT }}
+        values: environment=${{ inputs.ENVIRONMENT }},app_version=${{ inputs.RELEASE_REVISION }}
         config-files: helm/chart/env/values-${{ inputs.ENVIRONMENT }}.yaml
         chart-version: ${{ inputs.RELEASE_REVISION }}
 
