@@ -7,6 +7,9 @@ on:
       HELM_CHART_REPO:
         required: true
         type: string
+      LOCAL_PATH:
+        required: false
+        type: string
       ENVIRONMENT:
         required: true
         type: string
@@ -24,6 +27,7 @@ name: Build and push docker image
 
 env:
   DEPLOYMENT: ${{ secrets.DEPLOYMENT }}
+  LOCAL_PATH: helm/chart
 
 jobs:
   reusable_workflow_job:
@@ -34,6 +38,9 @@ jobs:
     - name: Set deployment name # if is different from secrets.DEPLOYMENT
       if: ${{ inputs.DEPLOYMENT }}
       run: echo "DEPLOYMENT=${{ inputs.DEPLOYMENT }}" >> $GITHUB_ENV
+    - name: Set deployment name # if it's not helm/chart
+      if: ${{ inputs.LOCAL_PATH }}
+      run: echo "LOCAL_PATH=${{ inputs.LOCAL_PATH }}" >> $GITHUB_ENV
 
     - name: Checkout
       uses: actions/checkout@v2
@@ -68,6 +75,6 @@ jobs:
         name: ${{ env.DEPLOYMENT }}-${{ inputs.ENVIRONMENT }}
         namespace: ${{ inputs.ENVIRONMENT }}
         values: environment=${{ inputs.ENVIRONMENT }},app_version=${{ inputs.RELEASE_REVISION }}
-        config-files: helm/chart/env/values-${{ inputs.ENVIRONMENT }}.yaml
+        config-files: ${{ inputs.LOCAL_PATH }}/env/values-${{ inputs.ENVIRONMENT }}.yaml
         chart-version: ${{ inputs.RELEASE_REVISION }}
 
