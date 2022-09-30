@@ -7,7 +7,7 @@ on:
       HELM_CHART_REPO:
         required: true
         type: string
-      LOCAL_PATH:
+      VALUES_LOCAL_PATH:
         required: false
         type: string
       ENVIRONMENT:
@@ -40,7 +40,7 @@ jobs:
       run: echo "DEPLOYMENT=${{ inputs.DEPLOYMENT }}" >> $GITHUB_ENV
     - name: Set deployment name # if it's not helm/chart
       if: ${{ inputs.LOCAL_PATH }}
-      run: echo "LOCAL_PATH=${{ inputs.LOCAL_PATH }}" >> $GITHUB_ENV
+      run: echo "VALUES_LOCAL_PATH=${{ inputs.VALUES_LOCAL_PATH }}" >> $GITHUB_ENV
 
     - name: Checkout
       uses: actions/checkout@v2
@@ -75,6 +75,6 @@ jobs:
         name: ${{ env.DEPLOYMENT }}-${{ inputs.ENVIRONMENT }}
         namespace: ${{ inputs.ENVIRONMENT }}
         values: environment=${{ inputs.ENVIRONMENT }},app_version=${{ inputs.RELEASE_REVISION }}
-        config-files: ${{ inputs.LOCAL_PATH }}/env/values-${{ inputs.ENVIRONMENT }}.yaml
+        config-files: ${{ env.VALUES_LOCAL_PATH }}/env/values-${{ inputs.ENVIRONMENT }}.yaml
         chart-version: ${{ inputs.RELEASE_REVISION }}
 
