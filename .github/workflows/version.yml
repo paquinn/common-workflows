@@ -19,7 +19,11 @@ jobs:
     steps:
     - name: Get Version
       run: |
-        echo "Version v1.1.0
+        echo "Changelog
+        v1.1.0
         - Use helm chart for deploys to dev and test
-- Add app version number to run deploy title
+        - Add app version number to run deploy title
+
+        v1.0.0
+        - Configure reuse workflows
         "
