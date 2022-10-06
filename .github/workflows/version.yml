@@ -8,7 +8,7 @@ on:
 
 permissions: read-all
 
-name:  '# Current version is v1.0.0 #'
+name:  '# Current version is v1.1.0 #'
 
 jobs:
   changelog:
@@ -18,4 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Get Version
-      run: echo v1.0.0
+      run: |
+        echo "Version v1.1.0
+        - Use helm chart for deploys to dev and test
+- Add app version number to run deploy title
+        "
