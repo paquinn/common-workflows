@@ -8,7 +8,8 @@ on:
 
 permissions: read-all
 
-name:  '# Current version is v1.1.0 #'
+name:  '# Current version is v1.1.1 #'
+run-name: Building changelog
 
 jobs:
   changelog:
@@ -20,6 +21,10 @@ jobs:
     - name: Get Version
       run: |
         echo "Changelog
+
+        v1.1.1
+        - Add paralogue version selection for clete apps
+
         v1.1.0
         - Use helm chart for deploys to dev and test
         - Add app version number to run deploy title
