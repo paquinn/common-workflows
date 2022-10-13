@@ -44,6 +44,7 @@ jobs:
         cat ${{ inputs.LOCAL_PATH }}/Chart.old.yaml | grep -Ev "appVersion|version" > ${{ inputs.LOCAL_PATH }}/Chart.yaml &&
         echo -e "\r\nappVersion: ${{ inputs.RELEASE_REVISION }}\r\n" >> ${{ inputs.LOCAL_PATH }}/Chart.yaml &&
         echo -e "\r\nversion: ${{ inputs.RELEASE_REVISION }}\r\n" >> ${{ inputs.LOCAL_PATH }}/Chart.yaml &&
+        sed -i 's/{{ .Values.app_version }}/${{ inputs.RELEASE_REVISION }}/g' ${{ inputs.LOCAL_PATH }}/templates/deployment.yaml
         cat ${{ inputs.LOCAL_PATH }}/Chart.yaml  
 
     - name: Install s3 helm plugin

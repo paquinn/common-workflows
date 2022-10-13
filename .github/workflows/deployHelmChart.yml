@@ -22,6 +22,9 @@ on:
       DEPLOYMENT:
         required: false
         type: string
+      PARALOGUE_VERSION:
+        required: false
+        type: string
 
 name: Build and push docker image
 
@@ -37,12 +40,18 @@ jobs:
     - name: Set chart repo name
       if: ${{ inputs.HELM_CHART_REPO }}
       run: echo "HELM_CHART_REPO=${{ inputs.HELM_CHART_REPO }}" >> $GITHUB_ENV
+
     - name: Set deployment name # if is different from secrets.DEPLOYMENT
       if: ${{ inputs.DEPLOYMENT }}
       run: echo "DEPLOYMENT=${{ inputs.DEPLOYMENT }}" >> $GITHUB_ENV
+
     - name: Set deployment name # if it's not helm/chart
       if: ${{ inputs.VALUES_LOCAL_PATH }}
       run: echo "VALUES_LOCAL_PATH=${{ inputs.VALUES_LOCAL_PATH }}" >> $GITHUB_ENV
+
+    - name: Set paralogue version for clete apps # if it's not helm/chart
+      if: ${{ inputs.PARALOGUE_VERSION }}
+      run: echo "PARALOGUE_VERSION=',paralogue.image_version=${{ inputs.PARALOGUE_VERSION }}'" >> $GITHUB_ENV    
 
     - name: Checkout
       uses: actions/checkout@v2
@@ -76,7 +85,7 @@ jobs:
         chart-repository:  ${{ env.HELM_CHART_REPO }}/${{ env.DEPLOYMENT }}
         name: ${{ env.DEPLOYMENT }}-${{ inputs.ENVIRONMENT }}
         namespace: ${{ inputs.ENVIRONMENT }}
-        values: environment=${{ inputs.ENVIRONMENT }},app_version=${{ inputs.RELEASE_REVISION }}
+        values: environment=${{ inputs.ENVIRONMENT }},app_version=${{ inputs.RELEASE_REVISION }},${{ env.PARALOGUE_VERSION }}
         config-files: ${{ env.VALUES_LOCAL_PATH }}/env/values-${{ inputs.ENVIRONMENT }}.yaml
         chart-version: ${{ inputs.RELEASE_REVISION }}
 
