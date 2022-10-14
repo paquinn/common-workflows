@@ -54,7 +54,7 @@ jobs:
       run: echo "PARALOGUE_VERSION=',paralogue.image_version=${{ inputs.PARALOGUE_VERSION }}'" >> $GITHUB_ENV    
 
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: ${{ github.event.pull_request.head.sha }}
 
