@@ -1,0 +1,34 @@
+on:
+  workflow_call:
+    inputs:
+      RELEASE_REVISION:
+        required: true
+        type: string
+      ECR_REPOSITORY:
+        required: true
+        type: string
+
+name: Scan docker images for vulnerabilities
+
+jobs:
+  reusable_workflow_job:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Pull docker image
+      run: docker pull 190961777710.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.ECR_REPOSITORY }}:${{ inputs.RELEASE_REVISION }}
+
+    - uses: homoluctus/gitrivy@v1.0.0
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        image: sample
