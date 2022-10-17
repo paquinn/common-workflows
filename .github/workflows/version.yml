@@ -8,7 +8,7 @@ on:
 
 permissions: read-all
 
-name:  '# Current version is v1.1.1 #'
+name:  '# Current version is v1.1.2 #'
 run-name: Building changelog
 
 jobs:
@@ -21,6 +21,11 @@ jobs:
     - name: Get Version
       run: |
         echo "Changelog
+
+        v1.1.2
+        - Update actions using node 12 to use node 16
+        - Update deprecated values definitions
+        - Move verify docker image to a reusable workflow
 
         v1.1.1
         - Add paralogue version selection for clete apps
