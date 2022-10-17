@@ -33,6 +33,6 @@ jobs:
 
     - uses: lazy-actions/gitrivy@v3
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
         image: ${{ env.DOCKER_IMAGE }}
         trivy_version: "0.22.0"
