@@ -31,12 +31,6 @@ jobs:
     - name: Pull docker image
       run: docker pull ${{ env.DOCKER_IMAGE }}
 
-#    - uses: lazy-actions/gitrivy@v3
-#      with:
-#        token: ${{ secrets.GITHUB_TOKEN }}
-#        image: ${{ env.DOCKER_IMAGE }}
-#        trivy_version: "0.22.0"
-
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
