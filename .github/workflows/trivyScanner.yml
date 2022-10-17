@@ -28,7 +28,7 @@ jobs:
     - name: Pull docker image
       run: docker pull 190961777710.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.ECR_REPOSITORY }}:${{ inputs.RELEASE_REVISION }}
 
-    - uses: homoluctus/gitrivy@v1.0.0
+    - uses: dataswift/gha-trivy@v3.0.0
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         image: sample
