@@ -16,6 +16,8 @@ env:
 jobs:
   reusable_workflow_job:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write 
     steps:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -33,6 +35,6 @@ jobs:
 
     - uses: lazy-actions/gitrivy@v3
       with:
-        token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         image: ${{ env.DOCKER_IMAGE }}
         trivy_version: "0.22.0"
