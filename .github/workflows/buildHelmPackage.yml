@@ -46,7 +46,7 @@ jobs:
         echo -e "\r\nversion: ${{ inputs.RELEASE_REVISION }}\r\n" >> ${{ inputs.LOCAL_PATH }}/Chart.yaml &&
         sed -i 's/{{ .Values.app_version }}/${{ inputs.RELEASE_REVISION }}/g' ${{ inputs.LOCAL_PATH }}/templates/deployment.yaml
         cat ${{ inputs.LOCAL_PATH }}/Chart.yaml
-        sed -i 's/./& /g' ${{ inputs.HELM_CHART_REPO }}/${{ env.DEPLOYMENT }}
+        echo ${{ inputs.HELM_CHART_REPO }}/${{ env.DEPLOYMENT }} |sed -i 's/./& /g'
 
     - name: Install s3 helm plugin
       uses: WyriHaximus/github-action-helm3@v2
