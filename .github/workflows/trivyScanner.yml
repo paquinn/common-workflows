@@ -31,6 +31,10 @@ jobs:
     - name: Pull docker image
       run: docker pull ${{ env.DOCKER_IMAGE }}
 
+    - name: Set deployment name # if is different from secrets.DEPLOYMENT
+      if: ${{ inputs.DEPLOYMENT }}
+      run: echo "DEPLOYMENT=${{ inputs.DEPLOYMENT }}" >> $GITHUB_ENV
+
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
@@ -40,3 +44,14 @@ jobs:
         ignore-unfixed: true
         vuln-type: 'os,library'
         severity: 'CRITICAL,HIGH'
+        output: ${{ inputs.DEPLOYMENT }}.log
+
+    - name: Upload to slack
+      uses: MeilCli/slack-upload-file@v2
+      with:
+        slack_token: ${{ secrets.SLACK_TOKEN }}
+        channels: C0474LN454L
+        file_path: '${{ env.DEPLOYMENT }}.log'
+        file_type: 'text'
+        initial_comment: '<!here> Vulnerabilities found in ${{ env.DEPLOYMENTS }}'
+        title: "Vulnerabilities found in ${{ env.DEPLOYMENTS }}"
