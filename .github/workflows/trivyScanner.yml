@@ -48,7 +48,7 @@ jobs:
         ignore-unfixed: true
         vuln-type: 'os,library'
         severity: 'CRITICAL,HIGH'
-        output: ${{ inputs.DEPLOYMENT }}.log
+        output: ${{ env.DEPLOYMENT }}.log
 
     - name: Upload to slack
       uses: MeilCli/slack-upload-file@v2
@@ -57,5 +57,5 @@ jobs:
         channels: C0474LN454L
         file_path: '${{ env.DEPLOYMENT }}.log'
         file_type: 'text'
-        initial_comment: '<!here> Vulnerabilities found in ${{ env.DEPLOYMENTS }}'
-        title: "Vulnerabilities found in ${{ env.DEPLOYMENTS }}"
+        initial_comment: '<!here> Vulnerabilities found in ${{ env.DEPLOYMENT }}'
+        title: "Vulnerabilities found in ${{ env.DEPLOYMENT }}"
