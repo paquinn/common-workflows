@@ -7,11 +7,15 @@ on:
       ECR_REPOSITORY:
         required: true
         type: string
+      DEPLOYMENT:
+        required: false
+        type: string
 
 name: Scan docker images for vulnerabilities
 
 env:
   DOCKER_IMAGE: 190961777710.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.ECR_REPOSITORY }}:${{ inputs.RELEASE_REVISION }}
+  DEPLOYMENT: ${{ secrets.DEPLOYMENT }}
 
 jobs:
   reusable_workflow_job:
