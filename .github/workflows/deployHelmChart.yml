@@ -51,7 +51,7 @@ jobs:
 
     - name: Set paralogue version for clete apps # if it's not helm/chart
       if: ${{ inputs.PARALOGUE_VERSION }}
-      run: echo "PARALOGUE_VERSION=',paralogue.image_version=${{ inputs.PARALOGUE_VERSION }}'" >> $GITHUB_ENV    
+      run: echo "PARALOGUE_VERSION=paralogue.image_version=${{ inputs.PARALOGUE_VERSION }}" >> $GITHUB_ENV    
 
     - name: Checkout
       uses: actions/checkout@v3
@@ -85,7 +85,7 @@ jobs:
         chart-repository:  ${{ env.HELM_CHART_REPO }}/${{ env.DEPLOYMENT }}
         name: ${{ env.DEPLOYMENT }}-${{ inputs.ENVIRONMENT }}
         namespace: ${{ inputs.ENVIRONMENT }}
-        values: environment=${{ inputs.ENVIRONMENT }},app_version=${{ inputs.RELEASE_REVISION }},${{ env.PARALOGUE_VERSION }}
+        values: environment=${{ inputs.ENVIRONMENT }},app_version=${{ inputs.RELEASE_REVISION }}${{ env.PARALOGUE_VERSION }}
         config-files: ${{ env.VALUES_LOCAL_PATH }}/env/values-${{ inputs.ENVIRONMENT }}.yaml
         chart-version: ${{ inputs.RELEASE_REVISION }}
 
