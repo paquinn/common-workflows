@@ -31,21 +31,6 @@ jobs:
       with:
         ref: ${{ github.event.pull_request.head.sha }}
 
-    - name: Look for main branch
-      run: |
-        if [[ `git branch | grep main` != '' ]]
-        then
-          echo "MAIN_BRANCH=main" >> $GITHUB_ENV
-        else
-          echo "MAIN_BRANCH=main" >> $GITHUB_ENV
-        fi
-
-    - name: Checkout files
-      uses: Bhacaz/checkout-files@v2
-      with:
-       files: helm
-       branch: ${{ env.MAIN_BRANCH }}
-
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:

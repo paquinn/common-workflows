@@ -45,21 +45,6 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-single-buildx
 
-    - name: Look for main branch
-      run: |
-        if [[ `git branch | grep main` != '' ]]
-        then
-          echo "MAIN_BRANCH=main" >> $GITHUB_ENV
-        else
-          echo "MAIN_BRANCH=main" >> $GITHUB_ENV
-        fi
-
-    - name: Checkout files
-      uses: Bhacaz/checkout-files@v2
-      with:
-       files: docker,.docker
-       branch: ${{ env.MAIN_BRANCH }}
-
     - name: Build & Push Image
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
