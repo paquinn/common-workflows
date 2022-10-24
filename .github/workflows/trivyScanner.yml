@@ -49,7 +49,7 @@ jobs:
         vuln-type: 'os,library'
         severity: 'CRITICAL,HIGH'
         output: ${{ env.DEPLOYMENT }}.log
-        security-checks: vuln,secret
+        security-checks: vuln
 
     - name: Upload to slack
       uses: MeilCli/slack-upload-file@v2
