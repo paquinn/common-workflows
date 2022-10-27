@@ -54,7 +54,7 @@ jobs:
     # Set slack_post to true if vulnerabilities found
     - name: Set slack post
       run: |
-        if [[ grep "Total: 0 (HIGH: 0, CRITICAL: 0)" ${{ env.DEPLOYMENT }}.log != '' ]]
+        if [[ $(grep "Total: 0 (HIGH: 0, CRITICAL: 0)" ${{ env.DEPLOYMENT }}.log) != '' ]]
         then
           echo "SLACK_POST=1" >> $GITHUB_ENV
         fi
