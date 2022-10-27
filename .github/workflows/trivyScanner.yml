@@ -51,7 +51,16 @@ jobs:
         output: ${{ env.DEPLOYMENT }}.log
         security-checks: vuln
 
+    # Set slack_post to true if vulnerabilities found
+    - name: Set slack post
+      run: |
+        if [[ grep "Total: 0 (HIGH: 0, CRITICAL: 0)" ${{ env.DEPLOYMENT }}.log != '' ]]
+        then
+          echo "SLACK_POST=1" >> $GITHUB_ENV
+        fi
+
     - name: Upload to slack
+      if: ${{ env.SLACK_POST }}
       uses: MeilCli/slack-upload-file@v2
       with:
         slack_token: ${{ secrets.SLACK_TOKEN }}
