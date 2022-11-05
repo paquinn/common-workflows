@@ -63,7 +63,7 @@ jobs:
         INPUT_ASSIGNEE: MartinQIremedy
         INPUT_PROJECT_ID: ${{ env.DEPLOYMENT }}
         INPUT_FILENAME: "os.log"
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
       run: scripts/commitIssue.sh
 
     - name: Run Trivy libs vulnerability scanner
@@ -84,5 +84,5 @@ jobs:
         INPUT_ASSIGNEE: ${{ env.GITHUB_REPOSITORY_OWNER }}
         INPUT_PROJECT_ID: ${{ env.DEPLOYMENT }}
         INPUT_FILENAME: "library.log"
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
       run: scripts/commitIssue.sh
