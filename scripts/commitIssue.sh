@@ -15,11 +15,6 @@ if [ -z "$GITHUB_REPOSITORY" ]; then
     exit 1
 fi
 
-if [ -z "$DEVOPS_TEAM" ]; then
-    echo "DEVOPS_TEAM must be set."
-    exit 1
-fi
-
 if [[ $(gh label list |grep vulnerability) = '' ]]
 then
 	gh label create "$INPUT_LABEL" --repo "$GITHUB_REPOSITORY"
