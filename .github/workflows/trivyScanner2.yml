@@ -83,4 +83,5 @@ jobs:
         INPUT_ASSIGNEE: ${{ env.GITHUB_REPOSITORY_OWNER }}
         INPUT_PROJECT_ID: ${{ env.DEPLOYMENT }}
         INPUT_FILENAME: "library.log"
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: scripts/commitIssue.sh
