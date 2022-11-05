@@ -11,10 +11,6 @@ on:
         required: false
         type: string
 
-permissions:
-  contents: read
-  issues: write
-
 name: Scan docker images for vulnerabilities
 
 env:
