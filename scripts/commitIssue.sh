@@ -17,7 +17,7 @@ fi
 
 if [[ $(gh label list |grep vulnerability) = '' ]]
 then
-	gh label create "$INPUT_LABEL" --repo "$GITHUB_REPOSITORY"
+	gh label create --force "$INPUT_LABEL" --repo "$GITHUB_REPOSITORY"
 fi
 
 issues=$(gh --repo "$GITHUB_REPOSITORY" issue list --label "$INPUT_LABEL" --json title --jq '.[].title')
