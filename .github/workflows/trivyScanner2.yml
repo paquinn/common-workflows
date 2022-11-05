@@ -24,7 +24,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        repository: PaquinnHealthcare/common-workflows
+        repository: PaquinHealthcare/common-workflows
         ref: main
 
     - name: Configure AWS credentials
