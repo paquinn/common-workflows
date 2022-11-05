@@ -78,8 +78,6 @@ jobs:
         output: library.json
         security-checks: vuln
 
-    - run: ls -l
-
     - name: Create issues for libs vulnerabilities
       env:
         INPUT_LABEL: vulnerability

@@ -17,7 +17,7 @@ fi
 
 if [[ $(gh label list |grep vulnerability) = '' ]]
 then
-	gh label create --force "$INPUT_LABEL" --repo "$GITHUB_REPOSITORY"
+	gh label create "$INPUT_LABEL" --repo "$GITHUB_REPOSITORY"
 fi
 
 issues=$(gh --repo "$GITHUB_REPOSITORY" issue list --label "$INPUT_LABEL" --json title --jq '.[].title')
@@ -78,14 +78,13 @@ EOF
 	if [[ $issue_title != "null: null" ]]
 	then
 		gh --repo "$GITHUB_REPOSITORY" issue create --title "$issue_title" --body "$body" --label "$INPUT_LABEL" $assignee
-		exit
 	fi
         echo ""
     done
 done
 
 # Associate issues with the specified project
-if [ -n "$INPUT_PROJECT_ID" ]; then
+if [ -n "$INPUT_PROJECT_ID" ] && [ $count -gt 0 ]; then
     echo "Creating cards in the project $INPUT_PROJECT_ID..."
     issue_numbers=$(gh --repo "$GITHUB_REPOSITORY" issue list --label "$INPUT_LABEL" --json number --jq '.[].number')
     echo "$issue_numbers" | while read -r number; do
