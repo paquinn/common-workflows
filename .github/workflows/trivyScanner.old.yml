@@ -21,12 +21,6 @@ jobs:
   reusable_workflow_job:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        repository: PaquinHealthcare/common-workflows
-        ref: main
-
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1-node16
       with:
@@ -45,44 +39,34 @@ jobs:
       if: ${{ inputs.DEPLOYMENT }}
       run: echo "DEPLOYMENT=${{ inputs.DEPLOYMENT }}" >> $GITHUB_ENV
 
-    - name: Run Trivy os vulnerability scanner
+    - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
         image-ref: ${{ env.DOCKER_IMAGE }}
-        format: 'json'
+        format: 'table'
         exit-code: '0'
         ignore-unfixed: true
-        vuln-type: 'os'
+        vuln-type: 'os,library'
         severity: 'CRITICAL,HIGH'
-        output: os.json
+        output: ${{ env.DEPLOYMENT }}.log
         security-checks: vuln
 
-    - name: Create issues for os vulnerabilities
-      env:
-        INPUT_LABEL: vulnerability
-        INPUT_ASSIGNEE: MartinQIremedy
-        INPUT_PROJECT_ID: ${{ env.DEPLOYMENT }}
-        INPUT_FILENAME: os.json
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      run: scripts/commitIssue.sh
+    # Set slack_post to true if vulnerabilities found
+    - name: Set slack post
+      run: |
+        if [[ $(grep "Total: 0 (HIGH: 0, CRITICAL: 0)" ${{ env.DEPLOYMENT }}.log) = '' ]]
+        then
+          echo "SLACK_POST=1" >> $GITHUB_ENV
+          echo $SLACK_POST
+        fi
 
-    - name: Run Trivy libs vulnerability scanner
-      uses: aquasecurity/trivy-action@master
+    - name: Upload to slack
+      if: ${{ env.SLACK_POST }}
+      uses: MeilCli/slack-upload-file@v2
       with:
-        image-ref: ${{ env.DOCKER_IMAGE }}
-        format: 'json'
-        exit-code: '0'
-        ignore-unfixed: true
-        vuln-type: 'library'
-        severity: 'CRITICAL,HIGH'
-        output: library.json
-        security-checks: vuln
-
-    - name: Create issues for libs vulnerabilities
-      env:
-        INPUT_LABEL: vulnerability
-        INPUT_ASSIGNEE: ${{ env.GITHUB_REPOSITORY_OWNER }}
-        INPUT_PROJECT_ID: ${{ env.DEPLOYMENT }}
-        INPUT_FILENAME: library.json
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      run: scripts/commitIssue.sh
+        slack_token: ${{ secrets.SLACK_TOKEN }}
+        channels: C0474LN454L
+        file_path: '${{ env.DEPLOYMENT }}.log'
+        file_type: 'text'
+        initial_comment: '<!here> Vulnerabilities found in ${{ env.DEPLOYMENT }}'
+        title: "Vulnerabilities found in ${{ env.DEPLOYMENT }}"
