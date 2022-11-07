@@ -8,7 +8,7 @@ on:
 
 permissions: read-all
 
-name:  '# Current version is v1.2.0 #'
+name:  '# Current version is v1.2.1 #'
 run-name: Building changelog
 
 jobs:
@@ -22,6 +22,9 @@ jobs:
       run: |
         echo "Changelog
 
+        v1.2.1
+        - Scans for vulnearabilities and creates GitHub issues
+        
         v1.2.0
         - Add trivy scanner for vulnerabilities
         - Add checkout the latests helm and docker folder
