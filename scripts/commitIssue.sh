@@ -84,7 +84,7 @@ EOF
 done
 
 # Associate issues with the specified project
-if [ -n "$INPUT_PROJECT_ID" ] && [ $count -gt 0 ]; then
+if [[ -n "$INPUT_PROJECT_ID" ]] && [[ $count -gt 0 ]]; then
     echo "Creating cards in the project $INPUT_PROJECT_ID..."
     issue_numbers=$(gh --repo "$GITHUB_REPOSITORY" issue list --label "$INPUT_LABEL" --json number --jq '.[].number')
     echo "$issue_numbers" | while read -r number; do
