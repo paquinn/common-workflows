@@ -8,7 +8,7 @@ on:
 
 permissions: read-all
 
-name:  '# Current version is v1.2.1 #'
+name:  '# Current version is v1.2.2 #'
 run-name: Building changelog
 
 jobs:
@@ -21,9 +21,11 @@ jobs:
     - name: Get Version
       run: |
         echo "Changelog
+        v1.2.2
+        - Trivy scanner runs at build instead of at deploy to dev
 
         v1.2.1
-        - Scans for vulnearabilities and creates GitHub issues
+        - Scans for vulnerabilities and creates GitHub issues
         
         v1.2.0
         - Add trivy scanner for vulnerabilities
