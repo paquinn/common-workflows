@@ -73,7 +73,7 @@ jobs:
         channels: C0474LN454L
         file_path: '${{ env.DEPLOYMENT }}.log'
         file_type: 'text'
-        initial_comment: '<!here> Vulnerabilities found in ${{ env.DEPLOYMENT }}'
+        initial_comment: 'Vulnerabilities found in ${{ env.DEPLOYMENT }}'
         title: "Vulnerabilities found in ${{ env.DEPLOYMENT }}"
 
     - name: Run Trivy os vulnerability scanner
