@@ -57,14 +57,15 @@ jobs:
         output: ${{ env.DEPLOYMENT }}.log
         security-checks: vuln
 
-#    # Set slack_post to true if vulnerabilities found
-#    - name: Set slack post
-#      run: |
-#        if [[ $(grep "Total: 0 (HIGH: 0, CRITICAL: 0)" ${{ env.DEPLOYMENT }}.log) = '' ]]
-#        then
-#          echo "SLACK_POST=1" >> $GITHUB_ENV
-#          echo $SLACK_POST
-#        fi
+    # Set slack_post to true if vulnerabilities found
+    - name: Set slack post
+      run: |
+        if [[ $(grep "Total: 0 (HIGH: 0, CRITICAL: 0)" ${{ env.DEPLOYMENT }}.log) = '' ]]
+        then
+          echo "SLACK_MESSAGE=':disappointed: Vulnerabilities found in ${{ env.DEPLOYMENT }}'" >> $GITHUB_ENV
+        else
+          echo "SLACK_MESSAGE=':blush: Congratulations! No vulnerabilities found in ${{ env.DEPLOYMENT }}'" >> $GITHUB_ENV
+        fi
 
     - name: Upload to slack
       uses: MeilCli/slack-upload-file@v2
@@ -73,7 +74,7 @@ jobs:
         channels: C0474LN454L
         file_path: '${{ env.DEPLOYMENT }}.log'
         file_type: 'text'
-        initial_comment: 'Vulnerabilities found in ${{ env.DEPLOYMENT }}'
+        initial_comment: '${{ env.SLACK_MESSAGE }}'
         title: "Vulnerabilities found in ${{ env.DEPLOYMENT }}"
 
     - name: Run Trivy os vulnerability scanner
