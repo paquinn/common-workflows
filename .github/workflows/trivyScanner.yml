@@ -62,9 +62,9 @@ jobs:
       run: |
         if [[ $(grep "Total: 0 (HIGH: 0, CRITICAL: 0)" ${{ env.DEPLOYMENT }}.log) = '' ]]
         then
-          echo "SLACK_MESSAGE=':disappointed: Vulnerabilities found in ${{ env.DEPLOYMENT }}'" >> $GITHUB_ENV
+          echo "SLACK_MESSAGE=:disappointed: Vulnerabilities found in ${{ env.DEPLOYMENT }}" >> $GITHUB_ENV
         else
-          echo "SLACK_MESSAGE=':blush: Congratulations! No vulnerabilities found in ${{ env.DEPLOYMENT }}'" >> $GITHUB_ENV
+          echo "SLACK_MESSAGE=:blush: Congratulations! No vulnerabilities found in ${{ env.DEPLOYMENT }}" >> $GITHUB_ENV
         fi
 
     - name: Upload to slack
@@ -75,7 +75,7 @@ jobs:
         file_path: '${{ env.DEPLOYMENT }}.log'
         file_type: 'text'
         initial_comment: '${{ env.SLACK_MESSAGE }}'
-        title: "Vulnerabilities found in ${{ env.DEPLOYMENT }}"
+        title: "Vulnerabilities report for ${{ env.DEPLOYMENT }}"
 
     - name: Run Trivy os vulnerability scanner
       uses: aquasecurity/trivy-action@master
