@@ -44,7 +44,14 @@ jobs:
         cat ${{ inputs.LOCAL_PATH }}/Chart.old.yaml | grep -Ev "appVersion|version" > ${{ inputs.LOCAL_PATH }}/Chart.yaml &&
         echo -e "\r\nappVersion: ${{ inputs.RELEASE_REVISION }}\r\n" >> ${{ inputs.LOCAL_PATH }}/Chart.yaml &&
         echo -e "\r\nversion: ${{ inputs.RELEASE_REVISION }}\r\n" >> ${{ inputs.LOCAL_PATH }}/Chart.yaml &&
-        sed -i 's/{{ .Values.app_version }}/${{ inputs.RELEASE_REVISION }}/g' ${{ inputs.LOCAL_PATH }}/templates/deployment.yaml
+        if [[ -f ${{ inputs.LOCAL_PATH }}/templates/deployment.yaml ]]
+        then
+          sed -i 's/{{ .Values.app_version }}/${{ inputs.RELEASE_REVISION }}/g' ${{ inputs.LOCAL_PATH }}/templates/deployment.yaml
+        fi
+        if [[ -f ${{ inputs.LOCAL_PATH }}/templates/cronjobs.yaml ]]
+        then
+          sed -i 's/{{ .Values.app_version }}/${{ inputs.RELEASE_REVISION }}/g' ${{ inputs.LOCAL_PATH }}/templates/cronjobs.yaml
+        fi
         cat ${{ inputs.LOCAL_PATH }}/Chart.yaml
         echo ${{ inputs.HELM_CHART_REPO }}/${{ env.DEPLOYMENT }} |sed 's/./& /g'
 
